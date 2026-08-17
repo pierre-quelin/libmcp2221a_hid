@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified"
+           attributeFormDefault="unqualified">
+
+  <xs:simpleType name="buildTargetType">
+    <xs:restriction base="xs:string">
+      <!-- XSD patterns are already whole-string; do not use ^ $ -->
+      <xs:pattern value="(linux(-[a-z0-9_]+){0,2}|mingw64|msvc[0-9]+(-x86_64)?)"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="idType">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="\d+"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="nonEmptyString">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="sourceType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="nuget"/>
+      <xs:enumeration value="git"/>
+      <xs:enumeration value="git-module"/>
+      <xs:enumeration value="git-submodules"/>
+      <xs:enumeration value="fs"/>
+      <xs:enumeration value="https"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="artifactType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="archive"/>
+      <xs:enumeration value="tree"/>
+      <xs:enumeration value="file"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="sourceElement">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="type" type="sourceType" use="required"/>
+        <xs:attribute name="artifact" type="artifactType" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="buildElement">
+    <xs:sequence>
+      <xs:any processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:element name="assembly">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="variants" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="variant" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="nonEmptyString"/>
+                    <xs:element name="id" type="idType"/>
+                    <xs:element name="env" type="xs:string" minOccurs="0"/>
+                    <xs:element name="build_path" type="xs:string" minOccurs="0"/>
+                    <xs:element name="build_target" type="buildTargetType" minOccurs="1" maxOccurs="unbounded"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+
+        <xs:element name="components" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="component" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" type="nonEmptyString"/>
+                    <xs:element name="version" type="xs:string" minOccurs="0"/>
+                    <xs:element name="path" type="xs:string" minOccurs="0"/>
+                    <xs:element name="source" type="sourceElement" minOccurs="0" maxOccurs="unbounded"/>
+                    <xs:choice minOccurs="0" maxOccurs="unbounded">
+                      <xs:element name="build_target" type="buildTargetType"/>
+                      <xs:element name="build" type="buildElement"/>
+                    </xs:choice>
+                  </xs:sequence>
+                  <xs:attribute name="optional" type="xs:boolean" use="optional"/>
+                  <xs:attribute name="managed_by" use="optional">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:enumeration value="description"/>
+                        <xs:enumeration value="cmake"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:attribute>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+</xs:schema>

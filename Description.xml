@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  libmcp2221a_hid assembly metadata.
+  Nested fetch (from a parent Description.xml): libusb prebuilt for MSVC.
+  Solo build may also use tools/Fetchlibusb_deps.bat via Build.bat fetch.
+-->
+<assembly>
+  <components>
+    <component>
+      <name>libusb</name>
+      <version>1.0.30</version>
+      <path>deps/libusb-1.0.30</path>
+      <source type="https" artifact="archive">https://github.com/libusb/libusb/releases/download/v1.0.30/libusb-1.0.30.7z</source>
+      <build_target>msvc16-x86_64</build_target>
+    </component>
+  </components>
+</assembly>

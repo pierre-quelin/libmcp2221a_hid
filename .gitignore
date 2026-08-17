@@ -1,0 +1,17 @@
+# Build artifacts
+/build/
+/dist/
+/deps/
+*.7z
+
+# IDE
+/.cproject
+/.project
+/.vscode/
+/.vs/
+*.user
+*.suo
+
+# Python
+__pycache__/
+*.pyc
