@@ -2,6 +2,12 @@
 
 C++ host API for the Microchip **MCP2221A** over **USB HID** (64-byte reports), using **libusb-1.0** interrupt transfers. Protocol: **DS20005565D**, Section 3.0. The public API uses **C++17** with **`ConstByteSpan`** / **`MutableByteSpan`** (non-owning views) instead of raw pointer/length pairs for buffers.
 
+## License
+
+This project is licensed under the **GNU Lesser General Public License v3.0** (LGPL-3.0).
+
+For the full license text, see: https://www.gnu.org/licenses/lgpl-3.0.txt
+
 ## Files
 
 | File | Role |
